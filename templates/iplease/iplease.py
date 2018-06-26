@@ -11,7 +11,6 @@ class IPLease(TemplateBase):
     def __init__(self, name=None, guid=None, data=None):
         super().__init__(name=name, guid=guid, data=data)
         self.__ip = None
-        # self.__timeout = None
 
     @property
     def info(self):
