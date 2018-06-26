@@ -22,6 +22,9 @@ First, let's situate the farming robot in the grid. Check the architecture diagr
 ## SAL
 Here is a scaffold of the interfaces and objects needed in the SAL
 
+### Exceptions
+- `OutOfIps` Exception is raised for Pool not having any free IP or for PoolsManager when the underlying pools don't have any free IPs.
+
 ### Objects:
 ```
 IPPool:
@@ -32,12 +35,22 @@ IPPool:
   name, str
   ips, list(str)
 ```
+Note: IPs is a list of a selected IPs in the network, in practice you never have a full hosts range, and it needs to be carefully set to avoid multiple pools having the same IP available.
+
 
 ### Interfaces
+
+`IPPoolsManager` manages a list of pools and keeps track of reservations done through it.
+
 ```
-IPPoolManager:
-  get_free_ip(pool_id=None) return an fee ip from the pool, if pool_id is None, get from a random pool
+IPPoolsManager:
+  get_free_ip(pool_id=None) -> (pool_id, ip) : reserves an IP from a certain pool
+  get_any_free_ip() -> (pool_id, ip) : reserves an IP from any of the managed pools
   release_ip(pool_id, ip) return an ip to the pool
+  is_reserved(ipaddr) -> checks if ipaddr is reserved ip
+  is_free_ip(ipaddr) -> checks if ipaddr is free 
+  available_ips -> collected available ips from the underlying pools
+  reserved_ips -> collects reserved ips from the underlying pools
 ```
 
 ## Templates
